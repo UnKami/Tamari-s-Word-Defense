@@ -665,7 +665,8 @@ const App: React.FC = () => {
     loadGame();
   }, [user]);
 
-  // Auto-save game state to database
+  // Auto-save game state to database (debounced)
+  // Note: Towers are excluded from dependencies because lastActionTime updates every frame
   useEffect(() => {
     if (!user || loading) return;
 
@@ -686,10 +687,10 @@ const App: React.FC = () => {
       }
     };
 
-    // Debounce save by 2 seconds
-    const timeoutId = setTimeout(saveGame, 2000);
+    // Debounce save by 3 seconds to reduce database calls
+    const timeoutId = setTimeout(saveGame, 3000);
     return () => clearTimeout(timeoutId);
-  }, [user, loading, gameState.health, gameState.coins, gameState.wave, gameState.towers, gameState.isWaveActive]);
+  }, [user, loading, gameState.health, gameState.coins, gameState.wave, gameState.isWaveActive]);
 
   const handleLogout = useCallback(async () => {
     await supabase.auth.signOut();
@@ -780,13 +781,25 @@ const App: React.FC = () => {
       range: TOWER_STATS[type].range
     };
 
-    setGameState(prev => ({
-      ...prev,
-      coins: prev.coins - cost,
-      towers: [...prev.towers, newTower]
-    }));
+    setGameState(prev => {
+      const newState = {
+        ...prev,
+        coins: prev.coins - cost,
+        towers: [...prev.towers, newTower]
+      };
+
+      // Immediately save towers to database
+      if (user) {
+        supabase
+          .from('game_saves')
+          .update({ towers: newState.towers, coins: newState.coins })
+          .eq('user_id', user.id);
+      }
+
+      return newState;
+    });
     setSelectedSlot(null);
-  }, [selectedSlot, gameState.coins]);
+  }, [selectedSlot, gameState.coins, user]);
 
   const upgradeTower = useCallback((id: string) => {
     const tower = gameState.towers.find(t => t.id === id);
@@ -794,12 +807,24 @@ const App: React.FC = () => {
     const cost = TOWER_STATS[tower.type].upgradeCost(tower.level);
     if (gameState.coins < cost) return;
 
-    setGameState(prev => ({
-      ...prev,
-      coins: prev.coins - cost,
-      towers: prev.towers.map(t => t.id === id ? { ...t, level: t.level + 1 } : t)
-    }));
-  }, [gameState.towers, gameState.coins]);
+    setGameState(prev => {
+      const newState = {
+        ...prev,
+        coins: prev.coins - cost,
+        towers: prev.towers.map(t => t.id === id ? { ...t, level: t.level + 1 } : t)
+      };
+
+      // Immediately save towers to database
+      if (user) {
+        supabase
+          .from('game_saves')
+          .update({ towers: newState.towers, coins: newState.coins })
+          .eq('user_id', user.id);
+      }
+
+      return newState;
+    });
+  }, [gameState.towers, gameState.coins, user]);
 
   // Show loading or auth screen
   if (loading) {
