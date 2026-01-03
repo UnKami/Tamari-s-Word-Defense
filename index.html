@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamari's Anime Lexicon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&family=Bungee&family=Mochi&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+            overflow: hidden;
+            background: #0f172a;
+            color: #f1f5f9;
+        }
+        .bungee { font-family: 'Bungee', cursive; }
+        
+        /* Anime Celebration Animation */
+        @keyframes chibi-celebrate {
+            0% { transform: scale(0) translateY(0); opacity: 0; }
+            20% { transform: scale(1.2) translateY(-20px); opacity: 1; }
+            40% { transform: scale(1) translateY(-10px) rotate(10deg); }
+            60% { transform: scale(1.1) translateY(-20px) rotate(-10deg); }
+            100% { transform: scale(0.8) translateY(-60px); opacity: 0; }
+        }
+        .animate-chibi {
+            animation: chibi-celebrate 1.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Sparkle effect */
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        .sparkle-node {
+            animation: sparkle 0.8s ease-in-out infinite;
+        }
+
+        /* Float up fade for damage/HP */
+        @keyframes float-up-fade {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(-80px); opacity: 0; }
+        }
+        .animate-float-up {
+            animation: float-up-fade 2.5s ease-out forwards;
+        }
+
+        /* Boss Death Explosion */
+        @keyframes boss-death {
+            0% { transform: scale(1) rotate(0); filter: brightness(1); }
+            20% { transform: scale(1.1) rotate(5deg); filter: brightness(2) contrast(2); }
+            40% { transform: scale(1.2) rotate(-5deg); filter: brightness(3); }
+            60% { transform: scale(1.4) rotate(0); filter: brightness(5) blur(2px); opacity: 1; }
+            100% { transform: scale(2); filter: brightness(10) blur(10px); opacity: 0; }
+        }
+        .animate-boss-death {
+            animation: boss-death 2s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+        }
+
+        /* Screen Shake */
+        @keyframes screen-shake {
+            0%, 100% { transform: translate(0, 0); }
+            10%, 30%, 50%, 70%, 90% { transform: translate(-4px, -2px); }
+            20%, 40%, 60%, 80% { transform: translate(4px, 2px); }
+        }
+        .animate-screen-shake {
+            animation: screen-shake 0.5s ease-in-out infinite;
+        }
+
+        /* Victory Banner */
+        @keyframes victory-banner-slide {
+            0% { transform: scaleX(0); opacity: 0; }
+            20% { transform: scaleX(1); opacity: 1; }
+            80% { transform: scaleX(1); opacity: 1; }
+            100% { transform: scaleX(0); opacity: 0; }
+        }
+        .animate-victory-banner {
+            animation: victory-banner-slide 3.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        }
+
+        @keyframes gold-shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .gold-text {
+            background: linear-gradient(90deg, #ffd700, #fff, #ffd700);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gold-shimmer 2s linear infinite;
+        }
+
+        .anime-border {
+            border: 3px solid #f472b6;
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.4);
+        }
+        
+        .anime-gradient {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        }
+
+        /* Custom Scrollbar for Grimoire */
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(15, 23, 42, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #ec4899;
+          border-radius: 10px;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>

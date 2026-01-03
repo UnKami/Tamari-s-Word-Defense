@@ -1,0 +1,5 @@
+{
+  "name": "Tamari's Word Defense",
+  "description": "A unique tower defense game where you defend your castle from advancing words by completing their missing letters. Build towers to slow enemies or auto-complete letters while managing your resources across waves.",
+  "requestFramePermissions": []
+}
